@@ -30,13 +30,21 @@ def get_modules(file_path):
     Parse the changed file path and get the respective module names
     """
     path = file_path.split('/')
+
+    # filter out non-java file
+    if not path[-1].endswith(".java"):
+        return
+
     top_directory = path[0]
 
     if top_directory in ["core", "codegen"]:
+        print("detected changes in core/codegen")
         return core_modules_to_test
-    if top_directory in ["http-clients"]:
-        return http_modules_to_test[path[1]]
+    elif top_directory in ["http-clients"]:
+        print("detected changes in http-clients")
+        return http_modules_to_test.get(path[1])
     elif top_directory== "services":
+        print("detected changes in services")
         return path[1]
 
 def run_tests(modules):

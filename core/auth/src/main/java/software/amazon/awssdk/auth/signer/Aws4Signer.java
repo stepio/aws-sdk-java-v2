@@ -20,6 +20,7 @@ import software.amazon.awssdk.auth.signer.internal.BaseAws4Signer;
 
 /**
  * Signer implementation that signs requests with the AWS4 signing protocol.
+ * //TODO: remove this line
  */
 @SdkPublicApi
 public final class Aws4Signer extends BaseAws4Signer {

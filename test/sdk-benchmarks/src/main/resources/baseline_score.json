@@ -1,0 +1,22 @@
+[
+  {
+    "benchmark": "ApiCallSyncHttpClientBenchmark.run",
+    "parameter": "ApacheHttpClient",
+    "score": 10000.0
+  },
+  {
+    "benchmark": "ApiCallSyncHttpClientBenchmark.run",
+    "parameter": "ApacheHttpClient",
+    "score": 10000.0
+  },
+  {
+    "benchmark": "ClientCreationBenchmark.run",
+    "parameter": "defaultClient",
+    "score": 10000.0
+  },
+  {
+    "benchmark": "ClientCreationBenchmark.run",
+    "parameter": "customizedClient",
+    "score": 100.0
+  }
+]

@@ -90,6 +90,7 @@ import software.amazon.awssdk.utils.Validate;
  * <p>See software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient for an alternative implementation.</p>
  *
  * <p>This can be created via {@link #builder()}</p>
+ * //TODO: remove this line
  */
 @SdkPublicApi
 public final class ApacheHttpClient implements SdkHttpClient {

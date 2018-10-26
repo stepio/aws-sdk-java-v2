@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+"""Run benchmarks based on the changed files
+
+"""
+import os
+from subprocess import check_call, Popen, PIPE
+
+core_benchmarks_to_run = ["ApiCallProtocolBenchmark", "ClientCreationBenchmark"]
+
+http_benchmarks_to_run = {
+    "apache-client": ["ApiCallHttpClientBenchmark", "ClientCreationBenchmark"],
+    "url-connection-client": ["ApiCallHttpClientBenchmark", "ClientCreationBenchmark"],
+    "netty-nio-client": ["ClientCreationBenchmark"]
+}
+
+def check_diffs():
+    """
+    Retrieve the changed files
+    """
+    ret = Popen(["git", "diff", "HEAD^", "--name-only"], stdout=PIPE)
+
+    diff, stderr = ret.communicate()
+    return diff.splitlines(False)
+
+def get_benchmarks(file_path):
+    """
+    Get the benchmarks to run
+    """
+    path = file_path.split('/')
+
+    # filter out non-java file
+    if not path[-1].endswith(".java"):
+        return
+
+    top_directory = path[0]
+
+    if top_directory in ["core", "codegen"]:
+        print("detected changes in core/codegen")
+        return core_benchmarks_to_run
+    elif top_directory in ["http-clients"]:
+        print("detected changes in http-clients")
+        return http_benchmarks_to_run.get(path[1])
+
+def run_tests(benchmarks):
+    """
+    Run the given benchmarks
+    """
+    benchmarks = ','.join(benchmarks)
+    print("Running the following benchmarks: " + benchmarks)
+
+    # build necessary dependencies first
+    check_call(["mvn", "clean", "install", "-P", "quick", "-pl", ":sdk-benchmarks", "--am"])
+
+    project_root = os.getcwd() + '/test/sdk-benchmarks'
+    check_call(["mvn", "exec:exec", "-Dbenchmarks=" + benchmarks], cwd=project_root)
+
+if __name__ == "__main__":
+    diffs = check_diffs()
+    benchmarks_to_run=set()
+    for d in diffs:
+        benchmarks = get_benchmarks(d)
+        if isinstance(benchmarks, list):
+            benchmarks_to_run.update(benchmarks)
+        elif benchmarks:
+            benchmarks_to_run.add(benchmarks)
+
+    if benchmarks_to_run:
+        run_tests(benchmarks_to_run)
+    else:
+        print("No benchmarks configured to run. Skipping benchmarking")
