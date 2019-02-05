@@ -1,0 +1,5 @@
+{
+    "category": "AWS SDK for Java v2", 
+    "type": "bugfix", 
+    "description": "Apply global defaults when HTTP clients are built using the `build()` method. Fixes [#1059](https://github.com/aws/aws-sdk-java-v2/issues/1059)."
+}

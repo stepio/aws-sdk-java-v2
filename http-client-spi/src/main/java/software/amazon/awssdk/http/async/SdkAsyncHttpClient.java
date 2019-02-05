@@ -15,6 +15,8 @@
 
 package software.amazon.awssdk.http.async;
 
+import static software.amazon.awssdk.http.SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS;
+
 import java.util.concurrent.CompletableFuture;
 import software.amazon.awssdk.annotations.Immutable;
 import software.amazon.awssdk.annotations.SdkPublicApi;
@@ -47,11 +49,11 @@ public interface SdkAsyncHttpClient extends SdkAutoCloseable {
     @FunctionalInterface
     interface Builder<T extends SdkAsyncHttpClient.Builder<T>> extends SdkBuilder<T, SdkAsyncHttpClient> {
         /**
-         * Create a {@link SdkAsyncHttpClient} without defaults applied. This is useful for reusing an HTTP client across
+         * Create a {@link SdkAsyncHttpClient} with global defaults applied. This is useful for reusing an HTTP client across
          * multiple services.
          */
         default SdkAsyncHttpClient build() {
-            return buildWithDefaults(AttributeMap.empty());
+            return buildWithDefaults(GLOBAL_HTTP_DEFAULTS);
         }
 
         /**

@@ -15,6 +15,8 @@
 
 package software.amazon.awssdk.http;
 
+import static software.amazon.awssdk.http.SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS;
+
 import software.amazon.awssdk.annotations.Immutable;
 import software.amazon.awssdk.annotations.SdkPublicApi;
 import software.amazon.awssdk.annotations.ThreadSafe;
@@ -45,11 +47,11 @@ public interface SdkHttpClient extends SdkAutoCloseable {
     @FunctionalInterface
     interface Builder<T extends SdkHttpClient.Builder<T>> extends SdkBuilder<T, SdkHttpClient> {
         /**
-         * Create a {@link SdkHttpClient} without defaults applied. This is useful for reusing an HTTP client across multiple
+         * Create a {@link SdkHttpClient} with global defaults applied. This is useful for reusing an HTTP client across multiple
          * services.
          */
         default SdkHttpClient build() {
-            return buildWithDefaults(AttributeMap.empty());
+            return buildWithDefaults(GLOBAL_HTTP_DEFAULTS);
         }
 
         /**
